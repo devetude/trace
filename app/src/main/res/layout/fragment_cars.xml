@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.devetude.trace.viewmodel.CarsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/car_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_car_with_last_history" />
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/add_car_add_floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/add_car_add_floating_action_button"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorDarkAccent"
+            app:fab_icon="@drawable/ic_white_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:onClick="@{viewModel::onAddCarFloatingActionButtonClicked}"
+            app:targetName="@{@string/target_add_car_add_floating_action_button}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

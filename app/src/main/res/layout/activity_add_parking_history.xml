@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.devetude.trace.viewmodel.AddParkingHistoryViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/parking_icon_image_view"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:contentDescription="@string/car_icon"
+                android:src="@drawable/ic_black_parking"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/top_description_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/add_a_new_history_top_description"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="28sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_icon_image_view" />
+
+            <TextView
+                android:id="@+id/selected_car_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/selected_car"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/top_description_text_view" />
+
+            <Button
+                android:id="@+id/selected_car_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/selector_caret_button_drawable_start"
+                android:ellipsize="end"
+                android:gravity="start|center_vertical"
+                android:maxLines="1"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/not_selected"
+                android:textColor="@drawable/selector_button_text_color"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/selected_car_text_view"
+                app:onClick="@{viewModel::onSelectedCarButtonClicked}"
+                app:targetName="@{@string/target_selected_car_button}" />
+
+            <TextView
+                android:id="@+id/parking_thumbnail_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/parking_thumbnail"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/selected_car_button" />
+
+            <ImageButton
+                android:id="@+id/parking_thumbnail_image_button"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/thumbnail_image_height"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/selector_thumbnail_image_button_background"
+                android:contentDescription="@string/parking_thumbnail_image_button"
+                android:src="@drawable/ic_white_camera"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_thumbnail_text_view"
+                app:onClick="@{viewModel::onParkingThumbnailImageButtonClicked}"
+                app:targetName="@{@string/target_parking_thumbnail_image_button}" />
+
+            <TextView
+                android:id="@+id/parking_floor_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/parking_floor"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintEnd_toStartOf="@id/parking_space_text_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_thumbnail_image_button" />
+
+            <TextView
+                android:id="@+id/parking_space_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/parking_space"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/parking_floor_text_view"
+                app:layout_constraintTop_toBottomOf="@id/parking_thumbnail_image_button" />
+
+            <Button
+                android:id="@+id/parking_floor_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/selector_caret_button_drawable_start"
+                android:ellipsize="end"
+                android:gravity="start|center_vertical"
+                android:maxLines="1"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/not_selected"
+                android:textColor="@drawable/selector_button_text_color"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toStartOf="@id/parking_space_text_input_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_floor_text_view"
+                app:onClick="@{viewModel::onSelectedParkingFloorButtonClicked}"
+                app:targetName="@{@string/target_parking_floor_button}" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/parking_space_text_input_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutTheme"
+                app:counterMaxLength="5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/parking_floor_button"
+                app:layout_constraintTop_toBottomOf="@id/parking_space_text_view">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/parking_space_text_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/parking_space_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="5"
+                    android:theme="@style/TextInputEditTextTheme"
+                    app:onTextChanged="@{viewModel::onParkingSpaceTextInputEditTextChanged}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/parking_location_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/parking_location_address"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintEnd_toStartOf="@id/parking_space_text_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_space_text_input_layout" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/parking_location_map_card_view"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/map_height"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="@dimen/corner_round"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_location_text_view">
+
+                <fragment
+                    android:id="@+id/parking_location_map_fragment"
+                    android:name="com.naver.maps.map.MapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/parking_location_address_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/current_location_is_unknown"
+                android:theme="@style/TextInputEditTextTheme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_location_map_card_view" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/parking_location_map_and_address_group"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:constraint_referenced_ids="parking_location_text_view,parking_location_map_card_view,parking_location_address_text_view" />
+
+            <Button
+                android:id="@+id/add_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/selector_state_button_background"
+                android:enabled="false"
+                android:text="@string/add"
+                android:textColor="@drawable/selector_add_button_text_color"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/parking_location_address_text_view"
+                app:onClick="@{viewModel::onAddButtonClicked}"
+                app:targetName="@{@string/target_add_button}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

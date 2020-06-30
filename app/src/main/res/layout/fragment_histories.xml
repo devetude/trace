@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.devetude.trace.viewmodel.HistoriesViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/histories_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_parking_history" />
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/add_history_floating_actions_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/add_history_floating_actions_menu"
+            android:visibility="gone"
+            app:fab_addButtonColorNormal="@color/colorAccent"
+            app:fab_addButtonColorPressed="@color/colorDarkAccent"
+            app:fab_icon="@drawable/ic_white_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_driving_history_floating_action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/add_driving_history_floating_action_button"
+                app:fab_colorNormal="@android:color/holo_green_light"
+                app:fab_colorPressed="@android:color/holo_green_dark"
+                app:fab_icon="@drawable/ic_white_driving"
+                app:onClick="@{viewModel::onAddDrivingHistoryFloatingActionButtonClicked}"
+                app:targetName="@{@string/target_add_driving_history_floating_action_button}" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_parking_history_floating_action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/add_parking_history_floating_action_button"
+                app:fab_colorNormal="@android:color/holo_red_light"
+                app:fab_colorPressed="@android:color/holo_red_dark"
+                app:fab_icon="@drawable/ic_white_parking"
+                app:onClick="@{viewModel::onAddParkingHistoryFloatingActionButtonClicked}"
+                app:targetName="@{@string/target_add_parking_history_floating_action_button}" />
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        <ImageView
+            android:id="@+id/empty_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/empty_image_view"
+            android:src="@drawable/ic_gray_empty"
+            app:layout_constraintBottom_toTopOf="@id/empty_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/empty_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/empty_history"
+            android:textColor="@color/colorWhiteGray"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/empty_image_view" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/empty_group"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:constraint_referenced_ids="empty_image_view,empty_text_view" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

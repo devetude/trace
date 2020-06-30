@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/car_thumbnail_image_view"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/shape_white_gray_circle"
+            android:contentDescription="@string/car_thumbnail_image_view"
+            android:padding="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/car_state_image_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/shape_white_green_circle"
+            android:contentDescription="@string/car_state_image_view"
+            android:padding="2dp"
+            android:src="@drawable/ic_white_driving"
+            app:layout_constraintBottom_toBottomOf="@id/car_thumbnail_image_view"
+            app:layout_constraintEnd_toEndOf="@id/car_thumbnail_image_view" />
+
+        <TextView
+            android:id="@+id/car_model_name_and_number_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/car_state_image_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/car_thumbnail_image_view"
+            app:layout_constraintTop_toTopOf="@id/car_thumbnail_image_view"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="@string/car_model_name_and_number" />
+
+        <TextView
+            android:id="@+id/driving_date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorWhiteGray"
+            android:textSize="14sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/car_thumbnail_image_view"
+            tools:text="@string/driving_date_text_view_hint" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

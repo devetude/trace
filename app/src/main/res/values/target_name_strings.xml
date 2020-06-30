@@ -1,0 +1,14 @@
+<resources>
+    <string name="target_car_thumbnail_image_button" translatable="false">car_thumbnail_image_button</string>
+    <string name="target_car_bluetooth_device_button" translatable="false">car_bluetooth_device_button</string>
+    <string name="target_add_button" translatable="false">add_button</string>
+    <string name="target_selected_car_button" translatable="false">selected_car_button</string>
+    <string name="target_parking_thumbnail_image_button" translatable="false">parking_thumbnail_image_button</string>
+    <string name="target_parking_floor_button" translatable="false">parking_floor_button</string>
+    <string name="target_add_driving_history_floating_action_button" translatable="false">add_driving_history_floating_action_button</string>
+    <string name="target_add_parking_history_floating_action_button" translatable="false">add_parking_history_floating_action_button</string>
+    <string name="target_car_state_button" translatable="false">car_state_button</string>
+    <string name="target_parking_location_address_button" translatable="false">parking_location_address_button</string>
+    <string name="target_add_car_add_floating_action_button" translatable="false">add_car_add_floating_action_button</string>
+    <string name="target_update_button" translatable="false">update_button</string>
+</resources>

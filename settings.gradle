@@ -1,0 +1,8 @@
+include ":trace-api"
+include ":trace-common"
+include ":trace-entity"
+include ":trace-viewmodel"
+include ":trace-usecase"
+include ":trace-db"
+include ":app"
+rootProject.name = "trace"

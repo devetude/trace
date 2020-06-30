@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="corner_round">4dp</dimen>
+    <dimen name="thumbnail_image_height">240dp</dimen>
+    <dimen name="map_height">240dp</dimen>
+    <dimen name="car_item_icon_side">48dp</dimen>
+</resources>

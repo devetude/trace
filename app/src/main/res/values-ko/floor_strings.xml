@@ -1,0 +1,20 @@
+<resources>
+    <string name="f9">지상 9층</string>
+    <string name="f8">지상 8층</string>
+    <string name="f7">지상 7층</string>
+    <string name="f6">지상 6층</string>
+    <string name="f5">지상 5층</string>
+    <string name="f4">지상 4층</string>
+    <string name="f3">지상 3층</string>
+    <string name="f2">지상 2층</string>
+    <string name="f1">지상 1층</string>
+    <string name="b1">지하 1층</string>
+    <string name="b2">지하 2층</string>
+    <string name="b3">지하 3층</string>
+    <string name="b4">지하 4층</string>
+    <string name="b5">지하 5층</string>
+    <string name="b6">지하 6층</string>
+    <string name="b7">지하 7층</string>
+    <string name="b8">지하 8층</string>
+    <string name="b9">지하 9층</string>
+</resources>

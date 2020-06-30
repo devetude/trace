@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "278099684335",
+    "firebase_url": "https://trace-android-app.firebaseio.com",
+    "project_id": "trace-android-app",
+    "storage_bucket": "trace-android-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278099684335:android:a567034cfaf8add5d3a41a",
+        "android_client_info": {
+          "package_name": "net.devetude.trace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278099684335-g3hqt4cu1l0b3gtdpvrka403u7bbkspk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFic59ufO_ngYwS79mls5JhlfuDgD_zQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278099684335-g3hqt4cu1l0b3gtdpvrka403u7bbkspk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="carWithLastHistory"
+            type="net.devetude.trace.entity.CarWithLastHistory" />
+
+        <variable
+            name="carsViewModel"
+            type="net.devetude.trace.viewmodel.CarsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/thumbnail_image_height"
+        app:onLongClickListener="@{()->carsViewModel.onCarItemLongClicked(carWithLastHistory.car)}">
+
+        <ImageView
+            android:id="@+id/car_thumbnail_image_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/no_image"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_dotted_black_pattern"
+            app:layout_constraintBottom_toBottomOf="@id/car_thumbnail_image_view"
+            app:layout_constraintEnd_toEndOf="@id/car_thumbnail_image_view"
+            app:layout_constraintStart_toStartOf="@id/car_thumbnail_image_view"
+            app:layout_constraintTop_toTopOf="@id/car_thumbnail_image_view" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorDarkOpaque"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/car_state_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/parking_state_button"
+            android:drawableStart="@drawable/ic_white_parking"
+            android:gravity="start|center_vertical"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:src="@drawable/ic_white_parking"
+            android:text="@string/parking"
+            android:textColor="@drawable/selector_car_item_text_color"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:onClick="@{()->carsViewModel.onCarStateButtonClicked(carWithLastHistory)}"
+            app:targetName="@{@string/target_car_state_button}" />
+
+        <Button
+            android:id="@+id/parking_location_address_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:drawableStart="@drawable/ic_white_map"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:textColor="@drawable/selector_car_item_text_color"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/car_state_button"
+            app:onClick="@{()->carsViewModel.onParkingLocationAddressButtonClicked(carWithLastHistory)}"
+            app:targetName="@{@string/target_parking_location_address_button}"
+            tools:text="@string/parking_location_address_hint"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/parking_location_floor_and_space_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:drawableStart="@drawable/ic_white_marker"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/parking_location_address_button"
+            tools:text="@string/parking_location_floor_and_space_text_view_hint"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/car_number_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/car_model_name_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/car_number_hint" />
+
+        <TextView
+            android:id="@+id/car_model_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/paired_car_bluetooth_device_state_image_view"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/car_model_name_hint" />
+
+        <ImageView
+            android:id="@+id/paired_car_bluetooth_device_state_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/paired_car_bluetooth_device_button"
+            android:src="@drawable/ic_white_bluetooth"
+            app:layout_constraintBottom_toBottomOf="@id/car_model_name_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/car_model_name_text_view"
+            app:layout_constraintTop_toTopOf="@id/car_model_name_text_view" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

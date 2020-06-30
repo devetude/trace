@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.devetude.trace.viewmodel.UpdateCarViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/car_icon_image_view"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:contentDescription="@string/car_icon"
+                android:src="@drawable/ic_black_car"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/top_description_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@{String.format(@string/update_car_top_description, viewModel.car.number)}"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="28sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_icon_image_view"
+                tools:text="@string/update_car_top_description" />
+
+            <TextView
+                android:id="@+id/car_thumbnail_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/car_thumbnail"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/top_description_text_view" />
+
+            <ImageButton
+                android:id="@+id/car_thumbnail_image_button"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/thumbnail_image_height"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/selector_thumbnail_image_button_background"
+                android:contentDescription="@string/car_thumbnail_image_button"
+                app:cornerRadius="@{@dimen/corner_round}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_thumbnail_text_view"
+                app:onClick="@{viewModel::onCarThumbnailImageButtonClicked}"
+                app:placeholder="@{@drawable/ic_white_camera}"
+                app:src="@{viewModel.car.imagePath}"
+                app:targetName="@{@string/target_car_thumbnail_image_button}"
+                tools:src="@drawable/ic_white_camera" />
+
+            <TextView
+                android:id="@+id/car_model_name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/car_model_name"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_thumbnail_image_button" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/car_model_name_text_input_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutTheme"
+                app:counterMaxLength="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_model_name_text_view">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/car_model_name_text_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/car_model_name_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:text="@{viewModel.car.modelName}"
+                    android:theme="@style/TextInputEditTextTheme"
+                    app:onTextChanged="@{viewModel::onCarModelNameChanged}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/car_bluetooth_device_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/car_bluetooth_device"
+                android:theme="@style/TextViewTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_model_name_text_input_layout" />
+
+            <Button
+                android:id="@+id/car_bluetooth_device_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/selector_caret_button_drawable_start"
+                android:ellipsize="end"
+                android:gravity="start|center_vertical"
+                android:maxLines="1"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@{viewModel.car.pairedBluetoothDevice.name ?? @string/not_selected}"
+                android:textColor="@drawable/selector_button_text_color"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_bluetooth_device_text_view"
+                app:onClick="@{viewModel::onCarBluetoothDeviceButtonClicked}"
+                app:targetName="@{@string/target_car_bluetooth_device_button}"
+                tools:text="@string/not_selected" />
+
+            <Button
+                android:id="@+id/update_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/selector_state_button_background"
+                android:enabled="@{viewModel.isUpdateButtonEnabled}"
+                android:text="@string/update"
+                android:textColor="@drawable/selector_add_button_text_color"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/car_bluetooth_device_button"
+                app:onClick="@{viewModel::onUpdateButtonClicked}"
+                app:targetName="@{@string/target_update_button}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

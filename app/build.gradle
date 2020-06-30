@@ -1,0 +1,108 @@
+apply plugin: "com.android.application"
+apply plugin: "com.google.android.gms.oss-licenses-plugin"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "kotlin-kapt"
+apply plugin: "com.android.application"
+apply plugin: "com.google.gms.google-services"
+apply plugin: "koin"
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+def NAVER_API_KEY_ID = properties.getProperty("naver.api.key.id")
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+
+    defaultConfig {
+        applicationId "net.devetude.trace"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 5
+        versionName "1.3.1"
+        manifestPlaceholders = ["NAVER_API_KEY_ID": NAVER_API_KEY_ID]
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs = ["-Xallow-result-return-type"]
+    }
+
+    applicationVariants.all { variant ->
+        variant.resValue "string", "version_name", variant.versionName
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation project(path: ":trace-db")
+    implementation project(path: ":trace-entity")
+    implementation project(path: ":trace-viewmodel")
+    implementation project(path: ":trace-usecase")
+    implementation project(path: ":trace-api")
+    implementation project(path: ":trace-common")
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCoreVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroidVersion"
+
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeKtxVersion"
+    implementation "androidx.activity:activity-ktx:$activityKtxVersion"
+    implementation "androidx.paging:paging-runtime-ktx:$pagingRuntimeKtxVersion"
+    implementation "androidx.preference:preference:$preferenceVersion"
+    kapt "androidx.databinding:databinding-compiler:$databindingCompilerVersion"
+
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "com.google.firebase:firebase-analytics:$firebaseAnalyticsVersion"
+    implementation "com.google.firebase:firebase-crashlytics:$firebaseCrashlyticsVersion"
+    implementation "com.google.android.gms:play-services-oss-licenses:$playServicesOssLicensesVersion"
+
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    implementation "com.facebook.stetho:stetho:$stethoVersion"
+
+    implementation "org.koin:koin-android:$koinVersion"
+    implementation "org.koin:koin-android-viewmodel:$koinVersion"
+
+    implementation "com.naver.maps:map-sdk:$mapSdkVersion"
+
+    implementation "com.google.android.gms:play-services-mlkit-text-recognition:$playServiceMlkitTextRecognitionVersion"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+
+    implementation "com.getbase:floatingactionbutton:$floatingActionButtonVersion"
+}
+
+apply plugin: "com.google.firebase.crashlytics"

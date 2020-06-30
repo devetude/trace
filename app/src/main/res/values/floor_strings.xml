@@ -1,0 +1,20 @@
+<resources>
+    <string name="f9">9F</string>
+    <string name="f8">8F</string>
+    <string name="f7">7F</string>
+    <string name="f6">6F</string>
+    <string name="f5">5F</string>
+    <string name="f4">4F</string>
+    <string name="f3">3F</string>
+    <string name="f2">2F</string>
+    <string name="f1">1F</string>
+    <string name="b1">B1</string>
+    <string name="b2">B2</string>
+    <string name="b3">B3</string>
+    <string name="b4">B4</string>
+    <string name="b5">B5</string>
+    <string name="b6">B6</string>
+    <string name="b7">B7</string>
+    <string name="b8">B8</string>
+    <string name="b9">B9</string>
+</resources>
