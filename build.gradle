@@ -2,7 +2,7 @@ buildscript {
     ext {
         compileSdkVersion = 29
 
-        gradleVersion = "4.0.0"
+        gradleVersion = "4.0.1"
         kotlinVersion = "1.3.72"
         googleServeiceVersion = "4.3.3"
         firebaseCrashlyticsGradleVersion = "2.2.0"
@@ -22,7 +22,7 @@ buildscript {
         lifecycleLiveDataKtxVersion = "2.2.0"
         lifecycleViewmodelKtxVersion = "2.2.0"
         activityKtxVersion = "1.1.0"
-        databindingCompilerVersion = "4.0.0"
+        databindingCompilerVersion = "4.0.1"
         materialVersion = "1.3.0-alpha02"
         firebaseAnalyticsVersion = "17.4.4"
         firebaseCrashlyticsVersion = "17.1.1"
