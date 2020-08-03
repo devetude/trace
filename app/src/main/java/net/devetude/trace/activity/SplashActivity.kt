@@ -36,41 +36,35 @@ class SplashActivity : AppCompatActivity() {
         viewModel.onPause()
     }
 
-    private fun observeActions() = with(viewModel) {
-        ioAction.observe(
-            this@SplashActivity /* owner */,
-            Observer {
-                when (it) {
-                    DoMandatoryAsyncWorks -> {
-                        doMandatoryAsyncWorks()
-                    }
-                }.exhaustive()
-            }
-        )
-        activityAction.observe(
-            this@SplashActivity /* owner */,
-            Observer {
-                when (it) {
-                    StartMainActivity -> {
-                        startMainActivity()
-                    }
-                    TurnOffTransitionAnimation -> {
-                        turnOffTransitionAnimation()
-                    }
-                    FinishActivity -> {
-                        finish()
-                    }
-                }.exhaustive()
-            }
-        )
+    private fun observeActions() {
+        observeIoActions()
+        observeActivityActions()
     }
+
+    private fun observeIoActions() = viewModel.ioAction.observe(
+        this@SplashActivity /* owner */,
+        Observer {
+            when (it) {
+                DoMandatoryAsyncWorks -> doMandatoryAsyncWorks()
+            }.exhaustive()
+        }
+    )
+
+    private fun observeActivityActions() = viewModel.activityAction.observe(
+        this@SplashActivity /* owner */,
+        Observer {
+            when (it) {
+                StartMainActivity -> startMainActivity()
+                TurnOffTransitionAnimation -> turnOffTransitionAnimation()
+                FinishActivity -> finish()
+            }.exhaustive()
+        }
+    )
 
     private fun doMandatoryAsyncWorks() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                TraceNotificationChannelCreator(
-                    context = this@SplashActivity
-                ).maybeCreateChannels()
+                TraceNotificationChannelCreator(context = this@SplashActivity).maybeCreateChannels()
                 traceDatabase.openHelper.writableDatabase
                 Stetho.initializeWithDefaults(this@SplashActivity /* context */)
             }
@@ -81,5 +75,8 @@ class SplashActivity : AppCompatActivity() {
     private fun turnOffTransitionAnimation() =
         overridePendingTransition(0 /* enterAnim */, 0 /* exitAnim */)
 
-    private fun startMainActivity() = startActivity(MainActivity.createIntent(context = this))
+    private fun startMainActivity() {
+        val intent = MainActivity.createIntent(context = this)
+        startActivity(intent)
+    }
 }
