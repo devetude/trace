@@ -52,4 +52,8 @@ dependencies {
     implementation "org.koin:koin-android-viewmodel:$koinVersion"
 
     implementation "com.google.android.gms:play-services-mlkit-text-recognition:$playServiceMlkitTextRecognitionVersion"
+
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "androidx.arch.core:core-testing:$coreTestingVersion"
 }
