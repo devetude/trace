@@ -1,3 +1,4 @@
+include ":trace-repository"
 include ":trace-api"
 include ":trace-common"
 include ":trace-entity"

@@ -37,13 +37,14 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    implementation project(path: ":trace-db")
+    implementation project(path: ":trace-api")
     implementation project(path: ":trace-entity")
-    implementation project(path: ":trace-repository")
     implementation project(path: ":trace-common")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCoreVersion"
 
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleLiveDataKtxVersion"
     implementation "androidx.paging:paging-runtime-ktx:$pagingRuntimeKtxVersion"
 

@@ -1,7 +1,7 @@
 package net.devetude.trace.usecase.car
 
 import androidx.lifecycle.LiveData
-import net.devetude.trace.db.repository.CarRepository
+import net.devetude.trace.repository.CarRepository
 import net.devetude.trace.entity.Car
 import net.devetude.trace.entity.CarWithLastHistory
 import net.devetude.trace.usecase.car.cases.CountCarsUseCase

@@ -1,4 +1,4 @@
-package net.devetude.trace.db.repository
+package net.devetude.trace.repository
 
 import androidx.paging.DataSource
 import net.devetude.trace.db.dao.HistoryDao

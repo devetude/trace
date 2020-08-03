@@ -4,7 +4,7 @@ import android.app.Application
 import net.devetude.trace.api.module.traceApiModule
 import net.devetude.trace.db.module.traceDaoModule
 import net.devetude.trace.db.module.traceDatabaseModule
-import net.devetude.trace.db.module.traceRepositoryModule
+import net.devetude.trace.repository.module.traceRepositoryModule
 import net.devetude.trace.usecase.module.traceUseCaseModule
 import net.devetude.trace.viewmodel.module.traceViewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -24,6 +24,7 @@ class TraceApplication : Application() {
 
     companion object {
         private val MODULES: List<Module> = listOf(
+            traceRepositoryModule,
             traceDatabaseModule,
             traceDaoModule,
             traceRepositoryModule,

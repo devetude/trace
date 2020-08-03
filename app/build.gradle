@@ -66,6 +66,7 @@ dependencies {
     implementation project(path: ":trace-viewmodel")
     implementation project(path: ":trace-usecase")
     implementation project(path: ":trace-api")
+    implementation project(path: ":trace-repository")
     implementation project(path: ":trace-common")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
