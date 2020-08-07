@@ -65,7 +65,7 @@ class UpdateCarViewModel(private val carUseCase: CarUseCase) : ViewModel() {
     var selectableBluetoothDevices: List<BluetoothDevice?> = emptyList()
 
     fun onCreate(carNumber: String?) {
-        if (carNumber.isNullOrBlank()) error("carNumber=$carNumber is null or blank")
+        require(!carNumber.isNullOrBlank()) { "carNumber=$carNumber is null or blank" }
         viewModelScope.launch { carUseCase.selectCarBy(carNumber)?.let { _car.value = it } }
     }
 
@@ -77,18 +77,10 @@ class UpdateCarViewModel(private val carUseCase: CarUseCase) : ViewModel() {
     }
 
     fun onImageActionSelected(@IntRange(from = 0, to = 2) which: Int) = when (which) {
-        CAPTURE_IMAGE_WHICH -> {
-            emit(ShowProgressDialog, CreateImageFileAsync)
-        }
-        IMAGE_GALLERY_WHICH -> {
-            emit(StartImageGalleryActivity)
-        }
-        DELETE_IMAGE_WHICH -> {
-            _car.value = car.value.getOrThrow().copy(imagePath = null)
-        }
-        else -> {
-            error("Invalid which=$which")
-        }
+        CAPTURE_IMAGE_WHICH -> emit(ShowProgressDialog, CreateImageFileAsync)
+        IMAGE_GALLERY_WHICH -> emit(StartImageGalleryActivity)
+        DELETE_IMAGE_WHICH -> _car.value = car.value.getOrThrow().copy(imagePath = null)
+        else -> error("Invalid which=$which")
     }.exhaustive()
 
     fun onCreateImageFileAsyncFailed() = emit(DismissProgressDialog, ShowFailToLoadImageToast)
