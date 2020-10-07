@@ -8,6 +8,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Event.SCREEN_VIEW
 import net.devetude.trace.R
 import net.devetude.trace.common.extension.exhaustive
 import net.devetude.trace.viewmodel.SettingsViewModel
@@ -21,14 +22,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseAnalytics.getInstance(requireContext())
-            .setCurrentScreen(requireActivity(), SCREEN_NAME, null)
+        sendScreenLogEvent()
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
         observeActions()
         viewModel.onCreatePreferences()
+    }
+
+    private fun sendScreenLogEvent() {
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, SCREEN_NAME)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, SCREEN_CLASS)
+        }
+        FirebaseAnalytics.getInstance(requireContext()).logEvent(SCREEN_VIEW, bundle)
     }
 
     private fun observeActions() = with(viewModel) {
@@ -69,6 +77,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     companion object {
         private const val SCREEN_NAME = "SettingsFragment"
+        private const val SCREEN_CLASS = "net.devetude.trace.fragment.SettingsFragment"
         private const val PRIVACY_POLICY_URI =
             "https://github.com/devetude/trace-privacy-policy/blob/master/README.md"
     }

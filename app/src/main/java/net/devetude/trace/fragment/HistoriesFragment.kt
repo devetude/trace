@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Event.SCREEN_VIEW
 import net.devetude.trace.R
 import net.devetude.trace.activity.AddParkingHistoryActivity
 import net.devetude.trace.adapter.HistoriesAdapter
@@ -65,8 +66,7 @@ class HistoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseAnalytics.getInstance(requireContext())
-            .setCurrentScreen(requireActivity(), SCREEN_NAME, null)
+        sendScreenLogEvent()
         observeActions()
         viewModel.onCreate()
     }
@@ -74,6 +74,14 @@ class HistoriesFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
+    }
+
+    private fun sendScreenLogEvent() {
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, SCREEN_NAME)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, SCREEN_CLASS)
+        }
+        FirebaseAnalytics.getInstance(requireContext()).logEvent(SCREEN_VIEW, bundle)
     }
 
     private fun observeActions() = with(viewModel) {
@@ -177,5 +185,6 @@ class HistoriesFragment : Fragment() {
 
     companion object {
         private const val SCREEN_NAME = "HistoriesFragment"
+        private const val SCREEN_CLASS = "net.devetude.trace.fragment.HistoriesFragment"
     }
 }

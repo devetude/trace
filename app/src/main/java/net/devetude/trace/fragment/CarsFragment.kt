@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Event.SCREEN_VIEW
 import net.devetude.trace.R
 import net.devetude.trace.activity.AddCarActivity
 import net.devetude.trace.activity.AddParkingHistoryActivity
@@ -67,10 +68,17 @@ class CarsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseAnalytics.getInstance(requireContext())
-            .setCurrentScreen(requireActivity(), SCREEN_NAME, null)
+        sendScreenLogEvent()
         observeActions()
         viewModel.onViewCreated()
+    }
+
+    private fun sendScreenLogEvent() {
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, SCREEN_NAME)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, SCREEN_CLASS)
+        }
+        FirebaseAnalytics.getInstance(requireContext()).logEvent(SCREEN_VIEW, bundle)
     }
 
     private fun observeActions() = with(viewModel) {
@@ -193,5 +201,6 @@ class CarsFragment : Fragment() {
 
     companion object {
         private const val SCREEN_NAME = "CarsFragment"
+        private const val SCREEN_CLASS = "net.devetude.trace.fragment.CarsFragment"
     }
 }
