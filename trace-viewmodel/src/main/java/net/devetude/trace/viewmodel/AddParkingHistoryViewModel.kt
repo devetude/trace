@@ -123,19 +123,13 @@ class AddParkingHistoryViewModel(
     }
 
     fun onImageActionSelected(@IntRange(from = 0, to = 2) which: Int) = when (which) {
-        CAPTURE_IMAGE_WHICH -> {
-            emit(ShowProgressDialog, CreateImageFileAsync)
-        }
-        IMAGE_GALLERY_WHICH -> {
-            emit(StartImageGalleryActivity)
-        }
+        CAPTURE_IMAGE_WHICH -> emit(ShowProgressDialog, CreateImageFileAsync)
+        IMAGE_GALLERY_WHICH -> emit(StartImageGalleryActivity)
         DELETE_IMAGE_WHICH -> {
             parkingImageUri = null
             emit(SetParkingThumbnailImageButtonAsync(parkingImageUri))
         }
-        else -> {
-            error("Invalid which=$which")
-        }
+        else -> error("Invalid which=$which")
     }.exhaustive()
 
     fun onCreateImageFileAsyncFailed() = emit(DismissProgressDialog, ShowFailToLoadImageToast)
@@ -270,13 +264,12 @@ class AddParkingHistoryViewModel(
     private fun List<TextElement>.filterFloor(): List<TextElement> =
         filter { !it.text.matches(BASEMENT_REGEX) && !it.text.matches(GROUND_REGEX) }
 
-    private fun List<TextElement>.getClosestElementFrom(point: Point): TextElement? = sortedWith(
-        Comparator { a: TextElement, b: TextElement ->
+    private fun List<TextElement>.getClosestElementFrom(point: Point): TextElement? =
+        sortedWith { a: TextElement, b: TextElement ->
             val aDist = a.centerPoint.getDistanceFrom(point)
             val bDist = b.centerPoint.getDistanceFrom(point)
             compareValues(aDist, bDist)
-        }
-    ).firstOrNull()
+        }.firstOrNull()
 
     private fun Point.getDistanceFrom(point: Point): Double = sqrt(
         x = (x - point.x).toDouble().pow(x = 2.0) + (y - point.y).toDouble().pow(x = 2.0)

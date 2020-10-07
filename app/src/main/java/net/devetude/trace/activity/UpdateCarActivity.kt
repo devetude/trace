@@ -12,7 +12,6 @@ import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
@@ -70,18 +69,10 @@ class UpdateCarActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            IMAGE_CAPTURE_REQ_CODE -> {
-                viewModel.onImageCaptureActivityResult(resultCode)
-            }
-            IMAGE_GALLERY_REQ_CODE -> {
-                viewModel.onImageGalleryActivityResult(resultCode, data?.data)
-            }
-            ACTIVATE_BLUETOOTH_REQ_CODE -> {
-                viewModel.onActivateBluetoothActivityResult(resultCode)
-            }
-            else -> {
-                error("Undefined requestCode=$requestCode")
-            }
+            IMAGE_CAPTURE_REQ_CODE -> viewModel.onImageCaptureActivityResult(resultCode)
+            IMAGE_GALLERY_REQ_CODE -> viewModel.onImageGalleryActivityResult(resultCode, data?.data)
+            ACTIVATE_BLUETOOTH_REQ_CODE -> viewModel.onActivateBluetoothActivityResult(resultCode)
+            else -> error("Undefined requestCode=$requestCode")
         }.exhaustive()
     }
 
@@ -96,88 +87,42 @@ class UpdateCarActivity : AppCompatActivity() {
     }
 
     private fun observeActions() = with(viewModel) {
-        viewAction.observe(
-            this@UpdateCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    HideSoftKeyboard -> {
-                        hideSoftKeyboard(binding.root)
-                    }
-                    is ShowImageActionDialog -> {
-                        showImageActionDialog(it.isDeleteImageSelectable)
-                    }
-                    ShowProgressDialog -> {
-                        showProgressDialog()
-                    }
-                    DismissProgressDialog -> {
-                        dismissProgressDialog()
-                    }
-                    ShowFailToLoadImageToast -> {
-                        showShortToast(R.string.failed_to_load_the_picture)
-                    }
-                    ShowNoSelectableBluetoothDeviceToast -> {
-                        showShortToast(R.string.not_paired_devices)
-                    }
-                    ShowSelectableBluetoothDeviceDialog -> {
-                        showSelectableBluetoothDeviceDialog()
-                    }
-                    ShowBluetoothActivationRequiredToast -> {
-                        showShortToast(R.string.bluetooth_activation)
-                    }
-                    ShowFailToUpdateCarToast -> {
-                        showShortToast(R.string.failed_to_update_car)
-                    }
-                }.exhaustive()
+        viewAction.observe(this@UpdateCarActivity /* owner */) {
+            when (it) {
+                HideSoftKeyboard -> hideSoftKeyboard(binding.root)
+                is ShowImageActionDialog -> showImageActionDialog(it.isDeleteImageSelectable)
+                ShowProgressDialog -> showProgressDialog()
+                DismissProgressDialog -> dismissProgressDialog()
+                ShowFailToLoadImageToast -> showShortToast(R.string.failed_to_load_the_picture)
+                ShowNoSelectableBluetoothDeviceToast ->
+                    showShortToast(R.string.not_paired_devices)
+                ShowSelectableBluetoothDeviceDialog -> showSelectableBluetoothDeviceDialog()
+                ShowBluetoothActivationRequiredToast ->
+                    showShortToast(R.string.bluetooth_activation)
+                ShowFailToUpdateCarToast -> showShortToast(R.string.failed_to_update_car)
+            }.exhaustive()
+        }
+        stateAction.observe(this@UpdateCarActivity /* owner */) {
+            when (it) {
+                SetCameraEnabled -> setCameraEnabled()
+                SetBluetoothEnabled -> setBluetoothEnabled()
+                SetSelectableBluetoothDevices -> setSelectableBluetoothDevices()
+            }.exhaustive()
+        }
+        activityAction.observe(this@UpdateCarActivity /* owner */) {
+            when (it) {
+                StartImageGalleryActivity -> startImageGalleryActivity()
+                is StartImageCaptureActivity -> startImageCaptureActivity(it.uri)
+                StartBluetoothEnableRequestActivity -> startBluetoothEnableRequestActivity()
+                FinishActivity -> finish()
+            }.exhaustive()
+        }
+        ioAction.observe(this@UpdateCarActivity /* owner */) {
+            when (it) {
+                CreateImageFileAsync -> createImageFileAsync()
+                is CopyGalleryImageAsync -> copyGalleryImageAsync(it.uri)
             }
-        )
-        stateAction.observe(
-            this@UpdateCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    SetCameraEnabled -> {
-                        setCameraEnabled()
-                    }
-                    SetBluetoothEnabled -> {
-                        setBluetoothEnabled()
-                    }
-                    SetSelectableBluetoothDevices -> {
-                        setSelectableBluetoothDevices()
-                    }
-                }.exhaustive()
-            }
-        )
-        activityAction.observe(
-            this@UpdateCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    StartImageGalleryActivity -> {
-                        startImageGalleryActivity()
-                    }
-                    is StartImageCaptureActivity -> {
-                        startImageCaptureActivity(it.uri)
-                    }
-                    StartBluetoothEnableRequestActivity -> {
-                        startBluetoothEnableRequestActivity()
-                    }
-                    FinishActivity -> {
-                        finish()
-                    }
-                }.exhaustive()
-            }
-        )
-        ioAction.observe(
-            this@UpdateCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    CreateImageFileAsync -> {
-                        createImageFileAsync()
-                    }
-                    is CopyGalleryImageAsync -> {
-                        copyGalleryImageAsync(it.uri)
-                    }
-                }
-            }
-        )
+        }
     }
 
     private fun setCameraEnabled() {
@@ -190,7 +135,7 @@ class UpdateCarActivity : AppCompatActivity() {
     }
 
     private fun showImageActionDialog(isDeleteImageSelectable: Boolean) {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this /* context */,
             android.R.layout.simple_list_item_1,
             ImageActionType.of(isDeleteImageSelectable).stringResources.map(::getString)
@@ -251,7 +196,7 @@ class UpdateCarActivity : AppCompatActivity() {
 
     private fun showSelectableBluetoothDeviceDialog() {
         val selectableBluetoothDevices = viewModel.selectableBluetoothDevices
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this /* context */,
             android.R.layout.simple_list_item_1,
             selectableBluetoothDevices.map { it?.name ?: getString(R.string.not_selected) }

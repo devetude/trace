@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import androidx.annotation.Size
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -78,57 +77,30 @@ class HistoriesFragment : Fragment() {
     }
 
     private fun observeActions() = with(viewModel) {
-        viewAction.observe(
-            this@HistoriesFragment /* owner */,
-            Observer {
-                when (it) {
-                    InitViews -> {
-                        initViews()
-                    }
-                    UpdateVisibleHistoryItemViews -> {
-                        updateVisibleHistoryItemViews()
-                    }
-                    ShowProgressDialog -> {
-                        showProgressDialog()
-                    }
-                    DismissProgressDialog -> {
-                        dismissProgressDialog()
-                    }
-                    ShowFailToAddHistoryToast -> {
-                        requireContext().showShortToast(R.string.failed_to_add_parking_history)
-                    }
-                    is ShowSelectableCarsDialog -> {
-                        showSelectableCarsDialog(it.selectableCars)
-                    }
-                    CollapseAddHistoryFloatingActionsMenu -> {
-                        binding.addHistoryFloatingActionsMenu.collapse()
-                    }
-                }.exhaustive()
-            }
-        )
-        stateAction.observe(
-            this@HistoriesFragment /* owner */,
-            Observer {
-                when (it) {
-                    RegisterTimeTickReceiver -> {
-                        registerTimeTickReceiver()
-                    }
-                    UnregisterTimeTickReceiver -> {
-                        unregisterTimeTickReceiver()
-                    }
-                }.exhaustive()
-            }
-        )
-        activityAction.observe(
-            this@HistoriesFragment /* owner */,
-            Observer {
-                when (it) {
-                    StartAddParkingHistoryActivity -> {
-                        startAddParkingHistoryActivity()
-                    }
-                }.exhaustive()
-            }
-        )
+        viewAction.observe(viewLifecycleOwner) {
+            when (it) {
+                InitViews -> initViews()
+                UpdateVisibleHistoryItemViews -> updateVisibleHistoryItemViews()
+                ShowProgressDialog -> showProgressDialog()
+                DismissProgressDialog -> dismissProgressDialog()
+                ShowFailToAddHistoryToast ->
+                    requireContext().showShortToast(R.string.failed_to_add_parking_history)
+                is ShowSelectableCarsDialog -> showSelectableCarsDialog(it.selectableCars)
+                CollapseAddHistoryFloatingActionsMenu ->
+                    binding.addHistoryFloatingActionsMenu.collapse()
+            }.exhaustive()
+        }
+        stateAction.observe(viewLifecycleOwner) {
+            when (it) {
+                RegisterTimeTickReceiver -> registerTimeTickReceiver()
+                UnregisterTimeTickReceiver -> unregisterTimeTickReceiver()
+            }.exhaustive()
+        }
+        activityAction.observe(viewLifecycleOwner) {
+            when (it) {
+                StartAddParkingHistoryActivity -> startAddParkingHistoryActivity()
+            }.exhaustive()
+        }
     }
 
     private fun initViews() {
@@ -137,21 +109,15 @@ class HistoriesFragment : Fragment() {
             layoutManager = linearLayoutManager
             itemAnimator = null
         }
-        viewModel.pagedHistoriesWithCar.observe(
-            this /* owner */,
-            Observer {
-                binding.historiesRecyclerView.isVisible = 0 < it.size
-                binding.emptyGroup.isVisible = !binding.historiesRecyclerView.isVisible
-                historiesAdapter.submitList(it)
-            }
-        )
-        viewModel.areNotCarsExist.observe(
-            this /* owner */,
-            Observer {
-                binding.addHistoryFloatingActionsMenu.isVisible = it
-                binding.historiesRecyclerView.isVisible = it
-            }
-        )
+        viewModel.pagedHistoriesWithCar.observe(viewLifecycleOwner) {
+            binding.historiesRecyclerView.isVisible = 0 < it.size
+            binding.emptyGroup.isVisible = !binding.historiesRecyclerView.isVisible
+            historiesAdapter.submitList(it)
+        }
+        viewModel.areNotCarsExist.observe(viewLifecycleOwner) {
+            binding.addHistoryFloatingActionsMenu.isVisible = it
+            binding.historiesRecyclerView.isVisible = it
+        }
     }
 
     private fun registerTimeTickReceiver() {
@@ -182,7 +148,7 @@ class HistoriesFragment : Fragment() {
     }
 
     private fun showSelectableCarsDialog(@Size(min = 1) selectableCars: List<Car>) {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_list_item_1,
             selectableCars.map {

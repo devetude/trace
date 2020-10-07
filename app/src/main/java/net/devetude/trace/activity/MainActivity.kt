@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import net.devetude.trace.R
 import net.devetude.trace.adapter.MainContentsAdapter
 import net.devetude.trace.common.annotation.MainViewPagePosition
@@ -43,25 +42,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeActions() = with(viewModel) {
-        viewAction.observe(
-            this@MainActivity /* owner */,
-            Observer {
-                when (it) {
-                    InitViews -> {
-                        initViews()
-                    }
-                    is SetCurrentPage -> {
-                        setCurrentPage(it.id)
-                    }
-                    is SetBottomNavigationItem -> {
-                        setBottomNavigationItem(it.position)
-                    }
-                    is SetActionBarTitle -> {
-                        setActionBarTitle(it.position)
-                    }
-                }.exhaustive()
-            }
-        )
+        viewAction.observe(this@MainActivity /* owner */) {
+            when (it) {
+                InitViews -> initViews()
+                is SetCurrentPage -> setCurrentPage(it.id)
+                is SetBottomNavigationItem -> setBottomNavigationItem(it.position)
+                is SetActionBarTitle -> setActionBarTitle(it.position)
+            }.exhaustive()
+        }
     }
 
     private fun initViews() {

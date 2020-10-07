@@ -2,7 +2,6 @@ package net.devetude.trace.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.facebook.stetho.Stetho
 import kotlinx.coroutines.Dispatchers
@@ -37,29 +36,19 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun observeActions() {
-        observeIoActions()
-        observeActivityActions()
-    }
-
-    private fun observeIoActions() = viewModel.ioAction.observe(
-        this@SplashActivity /* owner */,
-        Observer {
+        viewModel.ioAction.observe(this@SplashActivity /* owner */) {
             when (it) {
                 DoMandatoryAsyncWorks -> doMandatoryAsyncWorks()
             }.exhaustive()
         }
-    )
-
-    private fun observeActivityActions() = viewModel.activityAction.observe(
-        this@SplashActivity /* owner */,
-        Observer {
+        viewModel.activityAction.observe(this@SplashActivity /* owner */) {
             when (it) {
                 StartMainActivity -> startMainActivity()
                 TurnOffTransitionAnimation -> turnOffTransitionAnimation()
                 FinishActivity -> finish()
             }.exhaustive()
         }
-    )
+    }
 
     private fun doMandatoryAsyncWorks() {
         lifecycleScope.launch {

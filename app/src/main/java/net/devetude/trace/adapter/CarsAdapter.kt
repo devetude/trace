@@ -21,12 +21,9 @@ class CarsAdapter(
     override fun onBindViewHolder(holder: CarsViewHolder, position: Int) {
         val item = getItem(position)
         when {
-            item is EmptyItem && holder is EmptyViewHolder -> {
-                holder.onBind()
-            }
-            item is CarWithLastHistoryItem && holder is CarViewLastHistoryViewHolder -> {
+            item is EmptyItem && holder is EmptyViewHolder -> holder.onBind()
+            item is CarWithLastHistoryItem && holder is CarViewLastHistoryViewHolder ->
                 holder.onBind(item, carsViewModel)
-            }
             else -> error("Undefined holder=$holder and item=$item")
         }
     }

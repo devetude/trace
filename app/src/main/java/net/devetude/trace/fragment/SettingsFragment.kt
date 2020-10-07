@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -33,27 +32,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun observeActions() = with(viewModel) {
-        viewAction.observe(
-            this@SettingsFragment,
-            Observer {
-                when (it) {
-                    InitViews -> initViews()
-                }.exhaustive()
-            }
-        )
-        activityAction.observe(
-            this@SettingsFragment,
-            Observer {
-                when (it) {
-                    StartPrivacyPolicyActivity -> {
-                        startPrivacyPolicyActivity()
-                    }
-                    StartOssLicensesMenuActivity -> {
-                        startOssLicensesMenuActivity()
-                    }
-                }.exhaustive()
-            }
-        )
+        viewAction.observe(this@SettingsFragment /* owner */) {
+            when (it) {
+                InitViews -> initViews()
+            }.exhaustive()
+        }
+        activityAction.observe(this@SettingsFragment /* owner */) {
+            when (it) {
+                StartPrivacyPolicyActivity -> startPrivacyPolicyActivity()
+                StartOssLicensesMenuActivity -> startOssLicensesMenuActivity()
+            }.exhaustive()
+        }
     }
 
     private fun initViews() {

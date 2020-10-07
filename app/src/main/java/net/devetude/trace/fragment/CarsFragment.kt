@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -75,59 +74,30 @@ class CarsFragment : Fragment() {
     }
 
     private fun observeActions() = with(viewModel) {
-        viewAction.observe(
-            this@CarsFragment /* owner */,
-            Observer {
-                when (it) {
-                    InitViews -> {
-                        initViews()
-                    }
-                    is ShowChangeToDrivingStateConfirmDialog -> {
-                        showChangeToDrivingStateConfirmDialog(it.car)
-                    }
-                    DismissChangeToDrivingStateConfirmDialog -> {
-                        changeToDrivingStateConfirmDialog?.dismiss()
-                    }
-                    ShowProgressDialog -> {
-                        showProgressDialog()
-                    }
-                    DismissProgressDialog -> {
-                        progressDialog?.dismiss()
-                    }
-                    is ShowSelectableCarActionDialog -> {
-                        showSelectableCarActionDialog(it.car)
-                    }
-                    is ShowDeleteCarConfirmDialog -> {
-                        showDeleteCarConfirmDialog(it.car)
-                    }
-                    DismissDeleteCarConfirmDialog -> {
-                        deleteCarConfirmDialog?.dismiss()
-                    }
-                    ShowFailToDeleteCarToast -> {
-                        requireContext().showShortToast(R.string.failed_to_delete_car)
-                    }
-                    is ShowSelectableHistoryActionDialog -> {
-                        showSelectableHistoryActionDialog(it.car)
-                    }
-                }.exhaustive()
-            }
-        )
-        activityAction.observe(
-            this@CarsFragment /* owner */,
-            Observer {
-                when (it) {
-                    StartAddCarActivity -> {
-                        startAddCarActivity()
-                    }
-                    is StartAddParkingHistoryActivity -> {
-                        startAddParkingHistoryActivity(it.carNumber)
-                    }
-                    is StartUpdateCarActivity -> {
-                        startUpdateCarActivity(it.carNumber)
-                    }
-                }.exhaustive()
-            }
-        )
+        viewAction.observe(viewLifecycleOwner) {
+            when (it) {
+                InitViews -> initViews()
+                is ShowChangeToDrivingStateConfirmDialog ->
+                    showChangeToDrivingStateConfirmDialog(it.car)
+                DismissChangeToDrivingStateConfirmDialog ->
+                    changeToDrivingStateConfirmDialog?.dismiss()
+                ShowProgressDialog -> showProgressDialog()
+                DismissProgressDialog -> progressDialog?.dismiss()
+                is ShowSelectableCarActionDialog -> showSelectableCarActionDialog(it.car)
+                is ShowDeleteCarConfirmDialog -> showDeleteCarConfirmDialog(it.car)
+                DismissDeleteCarConfirmDialog -> deleteCarConfirmDialog?.dismiss()
+                ShowFailToDeleteCarToast ->
+                    requireContext().showShortToast(R.string.failed_to_delete_car)
+                is ShowSelectableHistoryActionDialog -> showSelectableHistoryActionDialog(it.car)
+            }.exhaustive()
+        }
+        activityAction.observe(viewLifecycleOwner) {
+            when (it) {
+                StartAddCarActivity -> startAddCarActivity()
+                is StartAddParkingHistoryActivity -> startAddParkingHistoryActivity(it.carNumber)
+                is StartUpdateCarActivity -> startUpdateCarActivity(it.carNumber)
+            }.exhaustive()
+        }
     }
 
     private fun initViews() {
@@ -137,10 +107,9 @@ class CarsFragment : Fragment() {
             itemAnimator = null
             setHasFixedSize(true)
         }
-        viewModel.carsWithLastHistory.observe(
-            this /* owner */,
-            Observer { carsAdapter.submitList(it.map(::CarWithLastHistoryItem)) }
-        )
+        viewModel.carsWithLastHistory.observe(viewLifecycleOwner) {
+            carsAdapter.submitList(it.map(::CarWithLastHistoryItem))
+        }
     }
 
     private fun showChangeToDrivingStateConfirmDialog(car: Car) {
@@ -176,7 +145,7 @@ class CarsFragment : Fragment() {
     }
 
     private fun showSelectableCarActionDialog(car: Car) {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_list_item_1,
             listOf(R.string.edit, R.string.delete).map(::getString)
@@ -204,7 +173,7 @@ class CarsFragment : Fragment() {
     }
 
     private fun showSelectableHistoryActionDialog(car: Car) {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_list_item_1,
             listOf(R.string.set_to_driving_state, R.string.add_parking_history).map(::getString)

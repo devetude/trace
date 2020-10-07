@@ -95,15 +95,10 @@ class CarsViewModel(
 
     fun onHistoryActionSelected(@IntRange(from = 0, to = 1) which: Int, car: Car) {
         when (which) {
-            INITIALIZE_TO_DRIVING_STATE_ACTION_WHICH -> {
-                insertDrivingHistory(car)
-            }
-            INITIALIZE_TO_PARKING_STATE_ACTION_WHICH -> {
+            INITIALIZE_TO_DRIVING_STATE_ACTION_WHICH -> insertDrivingHistory(car)
+            INITIALIZE_TO_PARKING_STATE_ACTION_WHICH ->
                 emit(StartAddParkingHistoryActivity(car.number))
-            }
-            else -> {
-                error("Invalid which=$which")
-            }
+            else -> error("Invalid which=$which")
         }
     }
 

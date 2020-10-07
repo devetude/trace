@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -131,15 +130,9 @@ class AddParkingHistoryActivity : AppCompatActivity(), LocationChangeListener, O
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            IMAGE_CAPTURE_REQ_CODE -> {
-                viewModel.onImageCaptureActivityResult(resultCode)
-            }
-            IMAGE_GALLERY_REQ_CODE -> {
-                viewModel.onImageGalleryActivityResult(resultCode, data?.data)
-            }
-            else -> {
-                error("Undefined requestCode=$requestCode")
-            }
+            IMAGE_CAPTURE_REQ_CODE -> viewModel.onImageCaptureActivityResult(resultCode)
+            IMAGE_GALLERY_REQ_CODE -> viewModel.onImageGalleryActivityResult(resultCode, data?.data)
+            else -> error("Undefined requestCode=$requestCode")
         }.exhaustive()
     }
 
@@ -150,12 +143,9 @@ class AddParkingHistoryActivity : AppCompatActivity(), LocationChangeListener, O
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            LOCATION_PERMISSIONS_REQ_CODE -> {
+            LOCATION_PERMISSIONS_REQ_CODE ->
                 viewModel.onRequestLocationPermissionsResult(grantResults)
-            }
-            else -> {
-                error("Undefined requestCode=$requestCode")
-            }
+            else -> error("Undefined requestCode=$requestCode")
         }
     }
 
@@ -177,130 +167,59 @@ class AddParkingHistoryActivity : AppCompatActivity(), LocationChangeListener, O
     }
 
     private fun observeActions() = with(viewModel) {
-        viewAction.observe(
-            this@AddParkingHistoryActivity /* owner */,
-            Observer {
-                when (it) {
-                    InitViews -> {
-                        initViews()
-                    }
-                    InitParkingLocationMap -> {
-                        initParkingLocationMap()
-                    }
-                    is SetSelectedCarButton -> {
-                        setSelectedCarButton(it.selectedCar)
-                    }
-                    is ShowSelectableCarsDialog -> {
-                        showSelectableCarsDialog(it.selectableCars)
-                    }
-                    ShowProgressDialog -> {
-                        showProgressDialog()
-                    }
-                    DismissProgressDialog -> {
-                        progressDialog?.dismiss()
-                    }
-                    HideSoftKeyboard -> {
-                        hideSoftKeyboard(binding.root)
-                    }
-                    is ShowImageActionDialog -> {
-                        showImageActionDialog(it.isDeleteImageSelectable)
-                    }
-                    ShowFailToLoadImageToast -> {
-                        showShortToast(R.string.failed_to_load_the_picture)
-                    }
-                    is SetParkingThumbnailImageButtonAsync -> {
-                        setParkingThumbnailImageButtonAsync(it.uri)
-                    }
-                    is SetAddButton -> {
-                        setAddButton(it.isEnabled)
-                    }
-                    ShowFailToAddParkingHistoryToast -> {
-                        showShortToast(R.string.failed_to_add_parking_history)
-                    }
-                    ShowSelectableParkingFloorsDialog -> {
-                        showSelectableParkingFloorsDialog()
-                    }
-                    is SetParkingFloorButton -> {
-                        setParkingFloorButton(it.floor)
-                    }
-                    is SetParkingSpaceTextInputEditText -> {
-                        setParkingSpaceTextInputEditText(it.space)
-                    }
-                    ShowCheckLocationActivationToast -> {
-                        showShortToast(R.string.check_location_activation)
-                    }
-                    ShowCheckLocationPermissionsToast -> {
-                        showShortToast(R.string.check_location_permissions)
-                    }
-                    ShowParkingLocationMapAndAddressGroup -> {
-                        showParkingLocationMapAndAddressGroup()
-                    }
-                    is SetParkingLocationMap -> {
-                        setParkingLocationMap(it.latitude, it.longitude)
-                    }
-                    is SetParkingLocationAddress -> {
-                        setParkingLocationAddress(it.address)
-                    }
-                }.exhaustive()
-            }
-        )
-        stateAction.observe(
-            this@AddParkingHistoryActivity /* owner */,
-            Observer {
-                when (it) {
-                    SetCameraEnabled -> {
-                        setCameraEnabled()
-                    }
-                    CheckLocationPermissions -> {
-                        checkLocationPermissions()
-                    }
-                    RequestLocationUpdates -> {
-                        locationRequester.request()
-                    }
-                    RequestLocationPermissions -> {
-                        requestLocationPermissions()
-                    }
-                    StopLocationUpdates -> {
-                        stopLocationUpdates()
-                    }
-                    SetAnalysisParkingThumbnailImageOption -> {
-                        setAnalysisParkingThumbnailImageOption()
-                    }
-                }.exhaustive()
-            }
-        )
-        activityAction.observe(
-            this@AddParkingHistoryActivity /* owner */,
-            Observer {
-                when (it) {
-                    StartImageGalleryActivity -> {
-                        startImageGalleryActivity()
-                    }
-                    is StartImageCaptureActivity -> {
-                        startImageCaptureActivity(it.uri)
-                    }
-                    FinishActivity -> {
-                        finish()
-                    }
-                }.exhaustive()
-            }
-        )
-        ioAction.observe(
-            this@AddParkingHistoryActivity /* owner */,
-            Observer {
-                when (it) {
-                    CreateImageFileAsync -> {
-                        createImageFileAsync()
-                    }
-                    is CopyGalleryImageAsync -> {
-                        copyGalleryImageAsync(it.uri)
-                    }
-                    is RecognizeText -> {
-                        recognizeText(it.uri)
-                    }
-                }.exhaustive()
-            }
-        )
+        viewAction.observe(this@AddParkingHistoryActivity /* owner */) {
+            when (it) {
+                InitViews -> initViews()
+                InitParkingLocationMap -> initParkingLocationMap()
+                is SetSelectedCarButton -> setSelectedCarButton(it.selectedCar)
+                is ShowSelectableCarsDialog -> showSelectableCarsDialog(it.selectableCars)
+                ShowProgressDialog -> showProgressDialog()
+                DismissProgressDialog -> progressDialog?.dismiss()
+                HideSoftKeyboard -> hideSoftKeyboard(binding.root)
+                is ShowImageActionDialog -> showImageActionDialog(it.isDeleteImageSelectable)
+                ShowFailToLoadImageToast -> showShortToast(R.string.failed_to_load_the_picture)
+                is SetParkingThumbnailImageButtonAsync ->
+                    setParkingThumbnailImageButtonAsync(it.uri)
+                is SetAddButton -> setAddButton(it.isEnabled)
+                ShowFailToAddParkingHistoryToast ->
+                    showShortToast(R.string.failed_to_add_parking_history)
+                ShowSelectableParkingFloorsDialog -> showSelectableParkingFloorsDialog()
+                is SetParkingFloorButton -> setParkingFloorButton(it.floor)
+                is SetParkingSpaceTextInputEditText -> setParkingSpaceTextInputEditText(it.space)
+                ShowCheckLocationActivationToast ->
+                    showShortToast(R.string.check_location_activation)
+                ShowCheckLocationPermissionsToast ->
+                    showShortToast(R.string.check_location_permissions)
+                ShowParkingLocationMapAndAddressGroup -> showParkingLocationMapAndAddressGroup()
+                is SetParkingLocationMap -> setParkingLocationMap(it.latitude, it.longitude)
+                is SetParkingLocationAddress -> setParkingLocationAddress(it.address)
+            }.exhaustive()
+        }
+        stateAction.observe(this@AddParkingHistoryActivity /* owner */) {
+            when (it) {
+                SetCameraEnabled -> setCameraEnabled()
+                CheckLocationPermissions -> checkLocationPermissions()
+                RequestLocationUpdates -> locationRequester.request()
+                RequestLocationPermissions -> requestLocationPermissions()
+                StopLocationUpdates -> stopLocationUpdates()
+                SetAnalysisParkingThumbnailImageOption -> setAnalysisParkingThumbnailImageOption()
+            }.exhaustive()
+        }
+        activityAction.observe(this@AddParkingHistoryActivity /* owner */)
+        {
+            when (it) {
+                StartImageGalleryActivity -> startImageGalleryActivity()
+                is StartImageCaptureActivity -> startImageCaptureActivity(it.uri)
+                FinishActivity -> finish()
+            }.exhaustive()
+        }
+        ioAction.observe(this@AddParkingHistoryActivity /* owner */) {
+            when (it) {
+                CreateImageFileAsync -> createImageFileAsync()
+                is CopyGalleryImageAsync -> copyGalleryImageAsync(it.uri)
+                is RecognizeText -> recognizeText(it.uri)
+            }.exhaustive()
+        }
     }
 
     private fun initViews() {
@@ -336,7 +255,7 @@ class AddParkingHistoryActivity : AppCompatActivity(), LocationChangeListener, O
     }
 
     private fun showSelectableCarsDialog(@Size(min = 1) selectableCars: List<Car?>) {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this /* context */,
             android.R.layout.simple_list_item_1,
             selectableCars.map { it.toStringOrNotSelected() }
@@ -362,7 +281,7 @@ class AddParkingHistoryActivity : AppCompatActivity(), LocationChangeListener, O
     }
 
     private fun showImageActionDialog(isDeleteImageSelectable: Boolean) {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this /* context */,
             android.R.layout.simple_list_item_1,
             ImageActionType.of(isDeleteImageSelectable).stringResources.map(::getString)
@@ -417,7 +336,7 @@ class AddParkingHistoryActivity : AppCompatActivity(), LocationChangeListener, O
     }
 
     private fun showSelectableParkingFloorsDialog() {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this /* context */,
             android.R.layout.simple_list_item_1,
             ParkingFloorType.values().map { getString(it.stringRes) }

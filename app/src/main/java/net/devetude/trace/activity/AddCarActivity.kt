@@ -12,7 +12,6 @@ import android.provider.MediaStore
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -80,18 +79,10 @@ class AddCarActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            IMAGE_CAPTURE_REQ_CODE -> {
-                viewModel.onImageCaptureActivityResult(resultCode)
-            }
-            IMAGE_GALLERY_REQ_CODE -> {
-                viewModel.onImageGalleryActivityResult(resultCode, data?.data)
-            }
-            ACTIVATE_BLUETOOTH_REQ_CODE -> {
-                viewModel.onActivateBluetoothActivityResult(resultCode)
-            }
-            else -> {
-                error("Undefined requestCode=$requestCode")
-            }
+            IMAGE_CAPTURE_REQ_CODE -> viewModel.onImageCaptureActivityResult(resultCode)
+            IMAGE_GALLERY_REQ_CODE -> viewModel.onImageGalleryActivityResult(resultCode, data?.data)
+            ACTIVATE_BLUETOOTH_REQ_CODE -> viewModel.onActivateBluetoothActivityResult(resultCode)
+            else -> error("Undefined requestCode=$requestCode")
         }.exhaustive()
     }
 
@@ -103,100 +94,45 @@ class AddCarActivity : AppCompatActivity() {
     }
 
     private fun observeActions() = with(viewModel) {
-        stateAction.observe(
-            this@AddCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    SetBluetoothEnabled -> {
-                        setBluetoothEnabled()
-                    }
-                    SetCameraEnabled -> {
-                        setCameraEnabled()
-                    }
-                    SetSelectableBluetoothDevices -> {
-                        setSelectableBluetoothDevices()
-                    }
-                }.exhaustive()
-            }
-        )
-        viewAction.observe(
-            this@AddCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    InitViews -> {
-                        initViews()
-                    }
-                    is ShowImageActionDialog -> {
-                        showImageActionDialog(it.isDeleteImageSelectable)
-                    }
-                    is EnableAddButton -> {
-                        enableAddButton(it.value)
-                    }
-                    ShowSelectableBluetoothDeviceDialog -> {
-                        showSelectableBluetoothDeviceDialog()
-                    }
-                    ShowNoSelectableBluetoothDeviceToast -> {
-                        showShortToast(R.string.not_paired_devices)
-                    }
-                    ShowFailToLoadImageToast -> {
-                        showShortToast(R.string.failed_to_load_the_picture)
-                    }
-                    is SetCarBluetoothDeviceButton -> {
-                        setCarBluetoothDeviceButton(it.text)
-                    }
-                    is SetCarThumbnailImageButtonAsync -> {
-                        setCarThumbnailImageButtonAsync(it.uri)
-                    }
-                    ShowBluetoothActivationRequiredToast -> {
-                        showShortToast(R.string.bluetooth_activation)
-                    }
-                    ShowProgressDialog -> {
-                        showProgressDialog()
-                    }
-                    DismissProgressDialog -> {
-                        dismissProgressDialog()
-                    }
-                    ShowFailToAddCarToast -> {
-                        showShortToast(R.string.failed_to_add_car)
-                    }
-                    HideSoftKeyboard -> {
-                        hideSoftKeyboard(binding.root)
-                    }
-                }.exhaustive()
-            }
-        )
-        activityAction.observe(
-            this@AddCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    StartImageGalleryActivity -> {
-                        startImageGalleryActivity()
-                    }
-                    is StartImageCaptureActivity -> {
-                        startImageCaptureActivity(it.uri)
-                    }
-                    StartBluetoothEnableRequestActivity -> {
-                        startBluetoothEnableRequestActivity()
-                    }
-                    FinishActivity -> {
-                        finish()
-                    }
-                }.exhaustive()
-            }
-        )
-        ioAction.observe(
-            this@AddCarActivity /* owner */,
-            Observer {
-                when (it) {
-                    CreateImageFileAsync -> {
-                        createImageFileAsync()
-                    }
-                    is CopyGalleryImageAsync -> {
-                        copyGalleryImageAsync(it.uri)
-                    }
-                }.exhaustive()
-            }
-        )
+        stateAction.observe(this@AddCarActivity /* owner */) {
+            when (it) {
+                SetBluetoothEnabled -> setBluetoothEnabled()
+                SetCameraEnabled -> setCameraEnabled()
+                SetSelectableBluetoothDevices -> setSelectableBluetoothDevices()
+            }.exhaustive()
+        }
+        viewAction.observe(this@AddCarActivity /* owner */) {
+            when (it) {
+                InitViews -> initViews()
+                is ShowImageActionDialog -> showImageActionDialog(it.isDeleteImageSelectable)
+                is EnableAddButton -> enableAddButton(it.value)
+                ShowSelectableBluetoothDeviceDialog -> showSelectableBluetoothDeviceDialog()
+                ShowNoSelectableBluetoothDeviceToast -> showShortToast(R.string.not_paired_devices)
+                ShowFailToLoadImageToast -> showShortToast(R.string.failed_to_load_the_picture)
+                is SetCarBluetoothDeviceButton -> setCarBluetoothDeviceButton(it.text)
+                is SetCarThumbnailImageButtonAsync -> setCarThumbnailImageButtonAsync(it.uri)
+                ShowBluetoothActivationRequiredToast ->
+                    showShortToast(R.string.bluetooth_activation)
+                ShowProgressDialog -> showProgressDialog()
+                DismissProgressDialog -> dismissProgressDialog()
+                ShowFailToAddCarToast -> showShortToast(R.string.failed_to_add_car)
+                HideSoftKeyboard -> hideSoftKeyboard(binding.root)
+            }.exhaustive()
+        }
+        activityAction.observe(this@AddCarActivity /* owner */) {
+            when (it) {
+                StartImageGalleryActivity -> startImageGalleryActivity()
+                is StartImageCaptureActivity -> startImageCaptureActivity(it.uri)
+                StartBluetoothEnableRequestActivity -> startBluetoothEnableRequestActivity()
+                FinishActivity -> finish()
+            }.exhaustive()
+        }
+        ioAction.observe(this@AddCarActivity /* owner */) {
+            when (it) {
+                CreateImageFileAsync -> createImageFileAsync()
+                is CopyGalleryImageAsync -> copyGalleryImageAsync(it.uri)
+            }.exhaustive()
+        }
     }
 
     private fun initViews() {
@@ -206,7 +142,7 @@ class AddCarActivity : AppCompatActivity() {
 
     private fun showSelectableBluetoothDeviceDialog() {
         val selectableBluetoothDevices = viewModel.selectableBluetoothDevices
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this /* context */,
             android.R.layout.simple_list_item_1,
             selectableBluetoothDevices.map { it?.name ?: getString(R.string.not_selected) }
@@ -220,7 +156,7 @@ class AddCarActivity : AppCompatActivity() {
     }
 
     private fun showImageActionDialog(isDeleteImageSelectable: Boolean) {
-        val adapter = ArrayAdapter<String>(
+        val adapter = ArrayAdapter(
             this /* context */,
             android.R.layout.simple_list_item_1,
             ImageActionType.of(isDeleteImageSelectable).stringResources.map(::getString)
