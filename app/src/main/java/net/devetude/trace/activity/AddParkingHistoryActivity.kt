@@ -160,8 +160,8 @@ class AddParkingHistoryActivity : AppCompatActivity(), LocationChangeListener, O
     }
 
     override fun onLocationCoordinateChanged(
-        @Latitude latitude: Double?,
-        @Longitude longitude: Double?
+        @Latitude latitude: Double,
+        @Longitude longitude: Double
     ) = viewModel.onLocationCoordinateChanged(latitude, longitude)
 
     override fun onMapReady(parkingLocationMap: NaverMap) {

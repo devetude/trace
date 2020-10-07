@@ -9,12 +9,12 @@ import net.devetude.trace.common.annotation.Longitude
 interface LocationChangeListener : LocationListener {
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) = Unit
 
-    override fun onProviderEnabled(provider: String?) = Unit
+    override fun onProviderEnabled(provider: String) = Unit
 
-    override fun onProviderDisabled(provider: String?) = Unit
+    override fun onProviderDisabled(provider: String) = Unit
 
-    override fun onLocationChanged(location: Location?) =
-        onLocationCoordinateChanged(location?.latitude, location?.longitude)
+    override fun onLocationChanged(location: Location) =
+        onLocationCoordinateChanged(location.latitude, location.longitude)
 
-    fun onLocationCoordinateChanged(@Latitude latitude: Double?, @Longitude longitude: Double?)
+    fun onLocationCoordinateChanged(@Latitude latitude: Double, @Longitude longitude: Double)
 }
