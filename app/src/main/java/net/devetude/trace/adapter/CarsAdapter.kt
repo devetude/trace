@@ -35,6 +35,11 @@ class CarsAdapter(
         super.submitList(list)
     }
 
+    override fun onViewRecycled(holder: CarsViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is CarViewLastHistoryViewHolder) holder.onViewRecycled()
+    }
+
     companion object {
         private val DIFFER: DiffUtil.ItemCallback<CarsItem> =
             object : DiffUtil.ItemCallback<CarsItem>() {

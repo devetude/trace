@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import net.devetude.trace.R
 import net.devetude.trace.common.extension.getLocale
 import net.devetude.trace.common.extension.loadRoundedCornersImage
@@ -21,13 +20,14 @@ import net.devetude.trace.model.ParkingFloorType
 import java.util.Date
 
 sealed class HistoriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    protected val glideRequestManager: RequestManager by lazy { Glide.with(itemView.context) }
-
     abstract fun onBind(historyWithCar: HistoryWithCar)
+
+    abstract fun onViewRecycled()
 
     protected fun bindCarThumbnailImageView(imageView: ImageView, imagePath: String?) {
         imagePath ?: return
-        glideRequestManager.load(imagePath)
+        Glide.with(itemView.context)
+            .load(imagePath)
             .circleCrop()
             .thumbnail(0.1f /* sizeMultiplier */)
             .into(imageView)
@@ -66,6 +66,11 @@ sealed class HistoriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
             bindDateTextView(binding.parkingDateTextView, history.createdDate)
         }
 
+        override fun onViewRecycled() = with(Glide.with(itemView.context)) {
+            clear(binding.carThumbnailImageView)
+            clear(binding.parkingThumbnailImageView)
+        }
+
         private fun bindParkingLocationAddressTextView(address: String?) {
             if (address.isNullOrBlank()) return
             binding.parkingLocationAddressTextView.apply {
@@ -92,9 +97,9 @@ sealed class HistoriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
         }
 
         private fun bindingParkingThumbnailImageView(imagePath: String?) {
+            binding.parkingThumbnailImageView.isVisible = imagePath != null
             imagePath ?: return
-            binding.parkingThumbnailImageView.isVisible = true
-            glideRequestManager.loadRoundedCornersImage(
+            Glide.with(itemView.context).loadRoundedCornersImage(
                 imagePath,
                 itemView.context.resources.getDimensionPixelSize(R.dimen.corner_round),
                 R.drawable.ic_white_no_image,
@@ -115,5 +120,8 @@ sealed class HistoriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
             )
             bindDateTextView(binding.drivingDateTextView, history.createdDate)
         }
+
+        override fun onViewRecycled() =
+            Glide.with(itemView.context).clear(binding.carThumbnailImageView)
     }
 }

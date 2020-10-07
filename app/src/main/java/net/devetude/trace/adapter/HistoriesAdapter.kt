@@ -19,6 +19,11 @@ class HistoriesAdapter : PagedListAdapter<HistoryWithCar, HistoriesViewHolder>(D
     override fun getItemViewType(position: Int): Int =
         HistoriesViewType.of(getItem(position)?.history?.isParkingState).ordinal
 
+    override fun onViewRecycled(holder: HistoriesViewHolder) {
+        super.onViewRecycled(holder)
+        holder.onViewRecycled()
+    }
+
     companion object {
         private val DIFFER: DiffUtil.ItemCallback<HistoryWithCar> =
             object : DiffUtil.ItemCallback<HistoryWithCar>() {

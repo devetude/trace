@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import net.devetude.trace.R
 import net.devetude.trace.databinding.ItemCarWithLastHistoryBinding
 import net.devetude.trace.databinding.ItemEmptyBinding
@@ -21,8 +20,6 @@ import net.devetude.trace.model.ParkingFloorType
 import net.devetude.trace.viewmodel.CarsViewModel
 
 sealed class CarsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    protected val glideRequestManager: RequestManager by lazy { Glide.with(itemView.context) }
-
     class EmptyViewHolder(
         private val binding: ItemEmptyBinding
     ) : CarsViewHolder(binding.root) {
@@ -48,6 +45,8 @@ sealed class CarsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             bindCarModelNameTextView(car.modelName)
         }
 
+        fun onViewRecycled() = Glide.with(itemView.context).clear(binding.carThumbnailImageView)
+
         private fun initBinding(
             carWithLastHistory: CarWithLastHistory,
             carsViewModel: CarsViewModel
@@ -59,7 +58,8 @@ sealed class CarsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         }
 
         private fun bindCarThumbnailImageView(imagePath: String?) {
-            glideRequestManager.load(imagePath)
+            Glide.with(itemView.context)
+                .load(imagePath)
                 .placeholder(R.drawable.ic_white_no_image)
                 .into(binding.carThumbnailImageView)
         }
